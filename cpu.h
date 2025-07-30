@@ -25,3 +25,6 @@ void cpu_update(cpu_pcb_t *cpu, double usage, int freq);
 int cpu_predict_freq(cpu_pcb_t *cpu);
 
 #endif // CPU_H
+
+// This file is now obsolete for the predictive governor implementation.
+// Please use predictive_model.h and related files as per the new project plan.
