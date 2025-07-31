@@ -1,30 +1,39 @@
-// cpu.h
-// CPU module: Simulated Process Control Block (PCB) for a real CPU
+
 #ifndef CPU_H
 #define CPU_H
 
 #include <stdint.h>
+#include <stdio.h>
+#include <string.h>
 
-// Simulated CPU PCB structure
-typedef struct {
-    uint32_t id;            // CPU/core ID
-    double usage;           // Current usage (0.0 - 1.0)
-    int freq;               // Current frequency (kHz)
-    int predicted_freq;     // Predicted frequency (kHz)
-    double usage_history[10]; // Usage history for prediction
-    int history_idx;        // Index for usage history
-} cpu_pcb_t;
+// CPU vendor enums
+#define CPU_VENDOR_UNKNOWN 0
+#define CPU_VENDOR_INTEL   1
+#define CPU_VENDOR_AMD     2
 
-// Initialize CPU PCB
-void cpu_init(cpu_pcb_t *cpu, uint32_t id);
+// CPU feature flags
+#define CPU_FEATURE_FPU    (1 << 0)
+#define CPU_FEATURE_MMX    (1 << 23)
+#define CPU_FEATURE_SSE    (1 << 25)
+#define CPU_FEATURE_SSE2   (1 << 26)
 
-// Update usage and frequency
-void cpu_update(cpu_pcb_t *cpu, double usage, int freq);
+struct cpuinfo_x86 {
+    int vendor;
+    int family;
+    int model;
+    int stepping;
+    int features;
+    int mhz;
+    int l1_cache_size;
+    int l2_cache_size;
+    int cores;
+    int threads;
+};
 
-// Predict next frequency
-int cpu_predict_freq(cpu_pcb_t *cpu);
+extern struct cpuinfo_x86 boot_cpu_data;
+
+void cpu_detect(void);
+void cpu_init(void);
+void print_cpu_info(void);
 
 #endif // CPU_H
-
-// This file is now obsolete for the predictive governor implementation.
-// Please use predictive_model.h and related files as per the new project plan.
